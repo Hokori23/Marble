@@ -53,7 +53,7 @@ module.exports = {
 
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
     // required to lint *.vue files
-    'vue',
+    'vue'
 
     // https://github.com/typescript-eslint/typescript-eslint/issues/389#issuecomment-509292674
     // Prettier has not been included as plugin to avoid performance impact
@@ -73,12 +73,66 @@ module.exports = {
   rules: {
     'prefer-promise-reject-errors': 'off',
 
+    /**
+     * Vue
+     * #<https://eslint.vuejs.org/rules/>
+     */
+    'vue/require-prop-types': 'error',
+    'vue/require-v-for-key': 'error',
+    "vue/no-use-v-if-with-v-for": ["error", {
+      "allowUsingIterationVar": false
+    }],
+    "vue/no-mutating-props": 'off',
+    "vue/v-bind-style": ["error", "shorthand"],
+    "vue/v-on-style": ["error", "shorthand"],
+    "vue/order-in-components": ["error", {
+      "order": [
+        "el",
+        "name",
+        "parent",
+        "functional",
+        ["delimiters", "comments"],
+        ["components", "directives", "filters"],
+        "extends",
+        "mixins",
+        "inheritAttrs",
+        "model",
+        ["props", "propsData"],
+        "setup",
+        "data",
+        "computed",
+        "watch",
+        "LIFECYCLE_HOOKS",
+        "methods",
+        ["template", "render"],
+        "renderError"
+      ]
+    }],
+    "vue/attributes-order": ["error", {
+      "order": [
+        "DEFINITION",
+        "LIST_RENDERING",
+        "CONDITIONALS",
+        "RENDER_MODIFIERS",
+        "GLOBAL",
+        "UNIQUE",
+        "TWO_WAY_BINDING",
+        "OTHER_DIRECTIVES",
+        "OTHER_ATTR",
+        "EVENTS",
+        "CONTENT"
+      ]
+    }],
+
     // TypeScript
     quotes: ['warn', 'single', { avoidEscape: true }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
-}
+};
