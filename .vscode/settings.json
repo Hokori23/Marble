@@ -1,12 +1,47 @@
 {
-  "vetur.validation.template": false,
-  "vetur.format.enable": false,
+  "vetur.validation.template": true,
+  "vetur.format.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "vetur.experimental.templateInterpolationService": true,
   "cSpell.words": [
     "Hokori",
+    "QUASARCONFOPTIONS",
+    "Unmount",
     "browserslist",
-    "commitlint"
-  ]
+    "commitlint",
+    "fontawesome",
+    "fullscreen",
+    "ionicons",
+    "mixins",
+    "myapp",
+    "overscroll",
+    "roboto",
+    "submodules",
+    "themify",
+    "transpiled",
+    "upyun",
+    "vuex"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+  // JS/TS 统一使用 eslint 进行 format
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.eol": "\n",
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.useTabs": true,
 }
