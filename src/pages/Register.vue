@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column items-center page q-pa-md">
+  <q-page class="column items-center page q-pa-md q-pt-none">
     <header>
       <h3 class="non-selectable text-center text-secondary q-mb-none">
         Marble

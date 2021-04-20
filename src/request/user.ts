@@ -15,19 +15,40 @@ export enum GenderCN {
   FEMALE = '女',
 }
 
-export enum Group {
+interface GenderItem {
+  value: Gender;
+  label: GenderCN;
+}
+
+export const genderOptions: GenderItem[] = [
+  {
+    value: Gender.UNKNOWN,
+    label: GenderCN.UNKNOWN,
+  },
+  {
+    value: Gender.MALE,
+    label: GenderCN.MALE,
+  },
+  {
+    value: Gender.FEMALE,
+    label: GenderCN.FEMALE,
+  },
+];
+
+export const enum Group {
   SUBSCRIBER = 0,
   ADMIN = 1,
   SUPER_ADMIN = 2,
 }
 
-export enum GroupCN {
+export const enum GroupCN {
   SUBSCRIBER = '普通用户',
   ADMIN = '管理员',
   SUPER_ADMIN = '超级管理员',
 }
 
 export interface User {
+  [key: string]: unknown;
   id: number | null;
   userAccount: string;
   userName: string;

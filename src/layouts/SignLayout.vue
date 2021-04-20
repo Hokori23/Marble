@@ -9,9 +9,11 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { PathName } from 'src/router/routes';
 import { isDef } from 'src/utils';
 import { Route } from 'vue-router';
+import { Store } from 'src/store';
+import { CommonStateInterface } from 'src/store/common/state';
+import { PathName } from 'src/router/routes';
 
 export default defineComponent({
   name: 'SignLayout',
@@ -34,11 +36,20 @@ export default defineComponent({
       const fromDepth = from.path.split('/').length;
       this.transitionName = toDepth > fromDepth ? 'slide-left' : 'slide-right';
     },
+    '$store.state.common.isLogin'(val) {
+      if (val) {
+        void this.$router.replace(PathName.HOME);
+      }
+    },
   },
-  created() {
-    const { $route, $router } = this;
-    if ($route.path === PathName.SIGN) {
-      void $router.replace(PathName.LOGIN);
+  beforeRouteEnter(to, from, next) {
+    const isLogin = (Store.store.state.common as CommonStateInterface).isLogin;
+    if (isLogin && to.path.startsWith(PathName.SIGN)) {
+      next(PathName.HOME);
+    } else if (to.path === PathName.SIGN) {
+      next(PathName.LOGIN);
+    } else {
+      next();
     }
   },
 });

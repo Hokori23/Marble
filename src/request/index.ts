@@ -3,10 +3,8 @@ import { Dialog } from 'quasar';
 import { REQUEST_WHITE_LIST } from 'src/utils/const';
 import { Restful } from './type';
 import * as user from './user';
-
-export const Store: { store: Vue['$store'] } = {
-  store: (null as unknown) as Vue['$store'],
-};
+import * as upload from './upload';
+import { Store } from 'src/store';
 const isWhiteUrl = (url: string) => {
   return !REQUEST_WHITE_LIST.every((reg) => !reg.test(url));
 };
@@ -59,5 +57,5 @@ export const request = async <T>(config: AxiosRequestConfig) => {
     }
   }
 };
-export { user };
-export default { user };
+export { user, upload };
+export default { user, upload };
