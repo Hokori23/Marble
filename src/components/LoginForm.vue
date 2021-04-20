@@ -38,8 +38,15 @@
     </div>
 
     <div class="row justify-evenly">
-      <q-btn label="登录" type="submit" color="primary" />
-      <q-btn label="重置" type="reset" color="primary" flat class="q-ml-sm" />
+      <q-btn label="登录" type="submit" color="primary" :loading="isLoading" />
+      <q-btn
+        label="重置"
+        type="reset"
+        color="primary"
+        flat
+        class="q-ml-sm"
+        :disable="isLoading"
+      />
     </div>
   </q-form>
 </template>
@@ -65,6 +72,10 @@ export default defineComponent({
     },
     onReset: {
       type: Function,
+      required: true,
+    },
+    isLoading: {
+      type: Boolean,
       required: true,
     },
   },

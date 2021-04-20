@@ -5,9 +5,19 @@ export enum PathName {
   LOGIN = '/sign/login',
   _REGISTER = 'register',
   REGISTER = '/sign/register',
-  HOME = '/',
-  _HOME = '',
+  HOME = '/home',
+  _HOME = 'home',
+  ENTRY = '/',
+  USER_CENTER = '/user',
 }
+
+export enum RouteName {
+  LOGIN = '登录',
+  REGISTER = '注册',
+  HOME = '首页',
+  USER_CENTER = '用户中心',
+}
+
 const routes: RouteConfig[] = [
   {
     path: PathName.SIGN,
@@ -16,20 +26,33 @@ const routes: RouteConfig[] = [
       {
         path: PathName._LOGIN,
         meta: { index: 0 },
-        component: () => import('src/pages/Login.vue'),
+        name: RouteName.LOGIN,
+        component: () => import('pages/Login.vue'),
       },
       {
         path: PathName._REGISTER,
         meta: { index: 1 },
-        component: () => import('src/pages/Register.vue'),
+        name: RouteName.REGISTER,
+        component: () => import('pages/Register.vue'),
       },
     ],
   },
   {
-    path: PathName.HOME,
+    path: PathName.ENTRY,
+    redirect: PathName.HOME,
+    name: RouteName.HOME,
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: PathName._HOME, component: () => import('pages/Index.vue') },
+      {
+        path: PathName._HOME,
+        name: RouteName.HOME,
+        component: () => import('src/pages/Home.vue'),
+      },
+      {
+        path: PathName.USER_CENTER,
+        name: RouteName.USER_CENTER,
+        component: () => import('pages/UserCenter.vue'),
+      },
     ],
   },
 

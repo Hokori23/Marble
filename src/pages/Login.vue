@@ -13,6 +13,7 @@
       :onReset="onReset"
       :userAccount.sync="userAccount"
       :password.sync="password"
+      :isLoading="isLoading"
     />
   </q-page>
 </template>
@@ -22,6 +23,7 @@ import { defineComponent } from '@vue/composition-api';
 import { isDef } from 'src/utils';
 import { PathName } from 'src/router/routes';
 import LoginForm from 'components/LoginForm.vue';
+
 export default defineComponent({
   components: {
     LoginForm,
@@ -31,11 +33,12 @@ export default defineComponent({
       userAccount: '',
       password: '',
       PathName: PathName,
+      isLoading: false,
     };
   },
   methods: {
     ...mapMutations({
-      setUserInfo: 'common/setUserInfo', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
+      setUserInfo: 'common/setUserInfo',
       setToken: 'common/setToken',
       logIn: 'common/logIn',
     }),
@@ -44,7 +47,9 @@ export default defineComponent({
     },
     async onSubmit() {
       const { userAccount, password } = this.$data;
+      this.isLoading = true;
       const res = await this.$request.user.login({ userAccount, password });
+      this.isLoading = false;
       if (isDef(res) && res.code === 0) {
         const { message, data } = res;
         if (isDef(data)) {

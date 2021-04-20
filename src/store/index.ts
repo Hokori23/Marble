@@ -16,6 +16,10 @@ export interface StateInterface {
   common: CommonStateInterface;
 }
 
+export const Store: { store: Vue['$store'] } = {
+  store: (null as unknown) as Vue['$store'],
+};
+
 export default store(function({ Vue }) {
   Vue.use(Vuex);
 

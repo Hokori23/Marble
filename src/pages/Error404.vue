@@ -16,7 +16,7 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
+        :to="PathName.HOME"
         label="Go Home"
         no-caps
       />
@@ -26,8 +26,11 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-
+import { PathName } from 'src/router/routes';
 export default defineComponent({
   name: 'Error404',
+  setup() {
+    return { PathName };
+  },
 });
 </script>

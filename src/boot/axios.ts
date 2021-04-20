@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { boot } from 'quasar/wrappers';
-import { Store } from 'src/request/index';
+import { Store } from 'src/store';
 
 declare module 'vue/types/vue' {
   interface Vue {
