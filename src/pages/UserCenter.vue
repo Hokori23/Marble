@@ -16,6 +16,14 @@
         <q-item-section>
           <q-item-label>{{ reactivedUserInfo.userName }}</q-item-label>
         </q-item-section>
+        <q-item-section>
+          <q-btn
+            outline
+            color="primary"
+            label="退出登录"
+            @click.stop="handleLogOut"
+          />
+        </q-item-section>
       </q-item>
 
       <q-separator />
@@ -46,6 +54,7 @@ import { User } from 'src/request/user';
 import { mapMutations } from 'vuex';
 
 export default defineComponent({
+  name: 'UserCenter',
   components: {
     EditForm,
     UploadAvatar,
@@ -90,7 +99,16 @@ export default defineComponent({
   methods: {
     ...mapMutations({
       setUserInfo: 'common/setUserInfo',
+      logOut: 'common/logOut',
     }),
+    handleLogOut() {
+      this.$q
+        .dialog({
+          title: '提示',
+          message: '确定退出登录？',
+        })
+        .onOk(this.logOut);
+    },
     async onSubmit() {
       const cloneUserInfo = JsonClone(this.reactivedUserInfo);
       this.userInfoUploading = true;

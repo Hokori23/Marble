@@ -25,6 +25,7 @@ interface FileTarget extends EventTarget {
   files: FileList;
 }
 export default defineComponent({
+  name: 'UploadAvatar',
   props: {
     src: {
       type: String,

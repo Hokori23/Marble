@@ -36,8 +36,8 @@ export default defineComponent({
       const fromDepth = from.path.split('/').length;
       this.transitionName = toDepth > fromDepth ? 'slide-left' : 'slide-right';
     },
-    '$store.state.common.isLogin'(val) {
-      if (val) {
+    '$store.state.common.isLogin'(v) {
+      if (v) {
         void this.$router.replace(PathName.HOME);
       }
     },

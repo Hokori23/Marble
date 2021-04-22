@@ -42,6 +42,7 @@ import RegisterForm from 'src/components/RegisterForm.vue';
 import { Gender } from 'src/request/user';
 
 export default defineComponent({
+  name: 'Register',
   components: {
     RegisterForm,
   },

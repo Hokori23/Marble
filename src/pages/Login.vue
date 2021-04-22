@@ -25,6 +25,7 @@ import { PathName } from 'src/router/routes';
 import LoginForm from 'components/LoginForm.vue';
 
 export default defineComponent({
+  name: 'Login',
   components: {
     LoginForm,
   },

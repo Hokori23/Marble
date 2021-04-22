@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <q-header elevate>
+      <q-toolbar class="non-selectable">
         <q-btn
           flat
           dense
@@ -15,7 +15,7 @@
           {{ title }}
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Marble - v1.0.0</div>
       </q-toolbar>
     </q-header>
 
@@ -34,7 +34,9 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </q-page-container>
   </q-layout>
 </template>
@@ -42,24 +44,28 @@
 <script lang="ts">
 import Drawer from 'src/components/Drawer.vue';
 
+import { defineComponent, ref } from '@vue/composition-api';
+import { Store } from 'src/store';
+import { PathName, RouteName } from 'src/router/routes';
+import { CommonStateInterface } from 'src/store/common/state';
+
 const rawMenuItems = [
   {
-    title: 'Marble',
+    title: RouteName.HOME,
     icon: 'home',
     link: PathName.HOME,
   },
   {
-    title: '用户中心',
-    // caption: 'Community Quasar projects',
+    title: RouteName.TEAM_CENTER,
+    icon: 'groups',
+    link: PathName.TEAM_CENTER,
+  },
+  {
+    title: RouteName.USER_CENTER,
     icon: 'account_circle',
     link: PathName.USER_CENTER,
   },
 ];
-
-import { defineComponent, ref } from '@vue/composition-api';
-import { Store } from 'src/store';
-import { PathName } from 'src/router/routes';
-import { CommonStateInterface } from 'src/store/common/state';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -73,6 +79,13 @@ export default defineComponent({
   computed: {
     title() {
       return this.$route.name;
+    },
+  },
+  watch: {
+    '$store.state.common.isLogin'(v) {
+      if (!v) {
+        void this.$router.replace(PathName.LOGIN);
+      }
     },
   },
   beforeRouteEnter(to, from, next) {
