@@ -1,5 +1,5 @@
 import { request } from './index';
-import { Restful, _Restful } from './type';
+import { Restful } from './type';
 import { User } from './user';
 
 const baseUrl = '/api/team';
