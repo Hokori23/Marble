@@ -79,7 +79,7 @@ import { genderOptions } from 'src/request/user';
 import { PathName } from 'src/router/routes';
 import { isEmail } from 'src/utils/index';
 export default defineComponent({
-  name: 'editForm',
+  name: 'EditForm',
   props: {
     userAccount: {
       type: String,

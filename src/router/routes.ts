@@ -5,9 +5,11 @@ export enum PathName {
   LOGIN = '/sign/login',
   _REGISTER = 'register',
   REGISTER = '/sign/register',
+  ENTRY = '/',
   HOME = '/home',
   _HOME = 'home',
-  ENTRY = '/',
+  TEAM_CENTER = '/team',
+  TEAM_DETAIL = '/team/:id',
   USER_CENTER = '/user',
 }
 
@@ -15,6 +17,8 @@ export enum RouteName {
   LOGIN = '登录',
   REGISTER = '注册',
   HOME = '首页',
+  TEAM_CENTER = '团队大厅',
+  TEAM_DETAIL = '团队',
   USER_CENTER = '用户中心',
 }
 
@@ -40,13 +44,22 @@ const routes: RouteConfig[] = [
   {
     path: PathName.ENTRY,
     redirect: PathName.HOME,
-    name: RouteName.HOME,
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: PathName._HOME,
         name: RouteName.HOME,
         component: () => import('src/pages/Home.vue'),
+      },
+      {
+        path: PathName.TEAM_CENTER,
+        name: RouteName.TEAM_CENTER,
+        component: () => import('src/pages/TeamCenter.vue'),
+      },
+      {
+        path: PathName.TEAM_DETAIL,
+        name: RouteName.TEAM_DETAIL,
+        component: () => import('src/pages/TeamDetail.vue'),
       },
       {
         path: PathName.USER_CENTER,
