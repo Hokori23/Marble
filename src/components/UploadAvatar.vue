@@ -7,7 +7,8 @@
         color="primary"
         size="100%"
       />
-      <img :src="src" />
+      <img v-if="src" :src="src" />
+      <q-icon v-else name="person" />
       <input
         :id="id"
         type="file"
@@ -20,6 +21,7 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import request from 'src/request';
+import { isUndef } from 'src/utils';
 
 interface FileTarget extends EventTarget {
   files: FileList;
@@ -29,7 +31,7 @@ export default defineComponent({
   props: {
     src: {
       type: String,
-      required: true,
+      default: '',
     },
     loading: {
       type: Boolean,
@@ -61,7 +63,7 @@ export default defineComponent({
       formData.append('file', file);
       this.$emit('beforeUpload');
       const res = await request.upload.upload(formData);
-      if (!res || res.code !== 0 || !res.data) {
+      if (isUndef(res) || res.code !== 0 || isUndef(res.data)) {
         this.$q.notify({
           type: 'warning',
           message: '上传头像失败',

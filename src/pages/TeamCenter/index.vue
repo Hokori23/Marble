@@ -42,13 +42,7 @@
   </q-page>
 </template>
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onActivated,
-  ref,
-  watch,
-} from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import TeamUserInfo from 'src/components/TeamUserInfo.vue';
 import TeamOverview from 'src/components/TeamOverview.vue';
 import NewTeamDialog from 'src/components/NewTeamDialog.vue';
@@ -56,8 +50,10 @@ import { PathName, RouteName } from 'src/router/routes';
 import { mapState } from 'vuex';
 import { StateInterface } from 'src/store';
 import request from 'src/request';
-import { Notify } from 'quasar';
-import { Team, TeamWithUsers } from 'src/request/team';
+import { Team } from 'src/request/team';
+import { isUndef } from 'src/utils';
+import useTeams from './useTeams';
+import useNewTeam from './useNewTeam';
 
 interface NewTeamDialogProps extends Vue {
   onReset: () => void;
@@ -71,41 +67,21 @@ export default defineComponent({
     NewTeamDialog,
   },
   setup() {
-    const page = ref(1);
-    const capacity = ref(5);
-    const total = ref(0);
-    const maxPage = computed(() => {
-      return Math.ceil(total.value / capacity.value);
-    });
-    const teams = ref([] as TeamWithUsers[]);
+    const {
+      page,
+      capacity,
+      total,
+      maxPage,
+      teams,
+      isLoading,
+      retrieveJoined,
+    } = useTeams();
 
-    const isLoading = ref(false);
-
-    const retrieveJoined = async () => {
-      isLoading.value = true;
-      const res = await request.team.retrieveJoined(page.value, capacity.value);
-      isLoading.value = false;
-      if (!res || res.code !== 0 || !res.data) {
-        Notify.create({
-          type: 'warning',
-          message: '查询团队失败',
-        });
-        return;
-      }
-      const data = res.data;
-      total.value = data.total;
-      teams.value = data.teams;
-    };
-
-    const newTeamDisplay = ref(false);
-    const isCreatingNewTeam = ref(false);
-    const handleNewTeamDisplay = () => {
-      newTeamDisplay.value = true;
-    };
-
-    watch(page, retrieveJoined);
-
-    onActivated(retrieveJoined);
+    const {
+      newTeamDisplay,
+      isCreatingNewTeam,
+      handleNewTeamDisplay,
+    } = useNewTeam();
 
     return {
       page,
@@ -131,7 +107,7 @@ export default defineComponent({
       this.isCreatingNewTeam = true;
       const res = await request.team.create(newTeam);
       this.isCreatingNewTeam = false;
-      if (!res || res.code !== 0 || !res.data) {
+      if (isUndef(res) || res.code !== 0 || isUndef(res.data)) {
         this.$q.notify({
           type: 'warning',
           message: '创建团队失败',
