@@ -82,10 +82,13 @@ export default defineComponent({
     },
   },
   watch: {
-    '$store.state.common.isLogin'(v) {
-      if (!v) {
-        void this.$router.replace(PathName.LOGIN);
-      }
+    '$store.state.common.isLogin': {
+      handler(v) {
+        if (!v) {
+          void this.$router.replace(PathName.LOGIN);
+        }
+      },
+      immediate: true,
     },
   },
   beforeRouteEnter(to, from, next) {

@@ -39,7 +39,9 @@
 import { defineComponent } from '@vue/composition-api';
 import { PathName } from 'src/router/routes';
 import RegisterForm from 'src/components/RegisterForm.vue';
-import { Gender } from 'src/request/user';
+import { Notify } from 'quasar';
+import { isUndef } from 'src/utils';
+import useRegister from './useRegister';
 
 export default defineComponent({
   name: 'Register',
@@ -47,32 +49,44 @@ export default defineComponent({
     RegisterForm,
   },
   setup() {
-    return { PathName };
-  },
-  data() {
+    const {
+      userAccount,
+      userName,
+      password,
+      gender,
+      email,
+      captcha,
+      onReset,
+      onSendCaptcha,
+    } = useRegister();
     return {
-      userAccount: '',
-      userName: '',
-      password: '',
-      gender: Gender.UNKNOWN,
-      email: '',
-      captcha: '',
+      userAccount,
+      userName,
+      password,
+      gender,
+      email,
+      captcha,
+      onReset,
+      onSendCaptcha,
+      PathName,
     };
   },
   methods: {
-    onReset() {
-      this.userAccount = this.userName = this.password = this.email = this.captcha =
-        '';
-      this.gender = Gender.UNKNOWN;
-    },
-    onSubmit() {
-      console.log(this.userAccount, this.password);
-    },
-    async onSendCaptcha() {
-      const { code } = await this.$request.user.sendCaptcha({
-        email: this.email,
+    async onSubmit() {
+      const { userAccount, password } = this.$data;
+      const res = await this.$request.user.register({ userAccount, password });
+      if (isUndef(res) || res.code !== 0) {
+        Notify.create({
+          type: 'warning',
+          message: res.message,
+        });
+        return;
+      }
+      Notify.create({
+        type: 'info',
+        message: '注册成功',
       });
-      return code === 0;
+      void this.$router.push(PathName.LOGIN);
     },
   },
 });

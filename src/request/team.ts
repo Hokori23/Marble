@@ -61,10 +61,24 @@ export const invite = async (uid: number, tid: number) => {
 export const retrieveJoined = async (page: number, capacity: number) => {
   return await request<Restful<TeamsRetrievedByPage>>({
     method: 'GET',
-    url: `${baseUrl}/retrieve`,
+    url: `${baseUrl}/retrieve-joined`,
     params: {
       page,
       capacity,
+    },
+  });
+};
+
+/**
+ * 通过id查询某团队
+ * @param { string } id
+ */
+export const retrieveById = async (id: string) => {
+  return await request<Restful<TeamWithUsers>>({
+    method: 'GET',
+    url: `${baseUrl}/retrieve`,
+    params: {
+      id,
     },
   });
 };

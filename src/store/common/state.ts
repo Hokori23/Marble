@@ -13,21 +13,19 @@ export const DefaultCommonState: CommonStateInterface = {
   isLogin: false,
 };
 
-// initial state
-(() => {
+function state(): CommonStateInterface {
+  // initial state
   const userInfo = localStorage.getItem(USER_INFO_NAME);
   const token = localStorage.getItem(ACCESS_TOKEN_NAME);
+  const cloneDefaultCommonState = JsonClone(DefaultCommonState);
   if (userInfo && token) {
     try {
-      DefaultCommonState.userInfo = JSON.parse(userInfo);
-      DefaultCommonState.token = token;
-      DefaultCommonState.isLogin = true;
+      cloneDefaultCommonState.userInfo = JSON.parse(userInfo);
+      cloneDefaultCommonState.token = token;
+      cloneDefaultCommonState.isLogin = true;
     } catch (error) {}
   }
-})();
-
-function state(): CommonStateInterface {
-  return JsonClone(DefaultCommonState);
+  return JsonClone(cloneDefaultCommonState);
 }
 
 export default state;

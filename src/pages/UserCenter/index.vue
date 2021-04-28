@@ -8,8 +8,8 @@
           <UploadAvatar
             :src="reactivedUserInfo.avatarUrl"
             :loading="avatarUploading"
-            @beforeUpload="beforeUpload"
-            @onUpload="onUpload"
+            @beforeUpload="beforeAvatarUpload"
+            @onUpload="handleAvatarUpload"
           />
         </q-item-section>
 
@@ -30,12 +30,13 @@
 
       <q-card-section class="column items-center">
         <EditForm
+          ref="editForm"
           :userAccount.sync="reactivedUserInfo.userAccount"
           :userName.sync="reactivedUserInfo.userName"
           :gender.sync="reactivedUserInfo.gender"
           :email.sync="reactivedUserInfo.email"
-          :onSubmit="onSubmit"
-          :onReset="onReset"
+          :onSubmit="handleSubmit"
+          :onReset="handleReset"
           :isChange="isChange"
           :loading="userInfoUploading"
           :disable="avatarUploading"
@@ -45,13 +46,13 @@
   </q-page>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, watch } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import EditForm from 'components/EditForm.vue';
 import UploadAvatar from 'components/UploadAvatar.vue';
-import { Store } from 'src/store';
-import { JsonClone } from 'src/utils';
-import { User } from 'src/request/user';
+import { JsonClone, isUndef } from 'src/utils';
 import { mapMutations } from 'vuex';
+import useAvatar from './useAvatar';
+import useUserInfo from './useUserInfo';
 
 export default defineComponent({
   name: 'UserCenter',
@@ -60,33 +61,24 @@ export default defineComponent({
     UploadAvatar,
   },
   setup() {
-    const isChange = ref(false);
-    const isReset = ref(false);
-    const avatarUploading = ref(false);
-    const userInfoUploading = ref(false);
-    const { userInfo } = Store.store.state.common;
-    const cloneUserInfo: User = JsonClone(userInfo);
-    const reactivedUserInfo = reactive(cloneUserInfo);
-
-    // 用于更改保存按钮disable状态
-    watch(
-      () => reactivedUserInfo,
-      () => {
-        if (!isReset.value) {
-          isChange.value = true;
-        } else {
-          isReset.value = false;
-        }
-      },
-      {
-        deep: true,
-      },
-    );
-
-    return {
+    const { avatarUploading, beforeAvatarUpload, onAvatarUpload } = useAvatar();
+    const {
       isChange,
       isReset,
+      userInfoUploading,
+      reactivedUserInfo,
+      onReset,
+      onSubmit,
+    } = useUserInfo();
+
+    return {
       avatarUploading,
+      beforeAvatarUpload,
+      onAvatarUpload,
+      isChange,
+      isReset,
+      onReset,
+      onSubmit,
       userInfoUploading,
       reactivedUserInfo,
     };
@@ -109,18 +101,19 @@ export default defineComponent({
         })
         .onOk(this.logOut);
     },
-    async onSubmit() {
-      const cloneUserInfo = JsonClone(this.reactivedUserInfo);
-      this.userInfoUploading = true;
-      const res = await this.$request.user.edit(cloneUserInfo);
-      this.userInfoUploading = false;
-      if (!res || res.code !== 0 || !res.data) {
+    handleReset() {
+      this.onReset(this.$store.state.common.userInfo);
+    },
+    async handleSubmit() {
+      const res = await this.onSubmit(this.reactivedUserInfo);
+      if (isUndef(res) || res.code !== 0 || isUndef(res.data)) {
         this.$q.notify({
           type: 'warning',
           message: '上传头像失败',
         });
       } else {
-        this.reactivedUserInfo = res.data;
+        this.reactivedUserInfo = JsonClone(res.data);
+        this.$forceUpdate(); // TODO: 解决输入框值不更新问题
         this.setUserInfo(res.data);
         this.$q.notify({
           type: 'success',
@@ -128,16 +121,12 @@ export default defineComponent({
         });
       }
     },
-    beforeUpload() {
-      this.avatarUploading = true;
-    },
-    async onUpload(url: string) {
-      const userInfo: User = this.$store.state.common.userInfo;
-      const cloneUserInfo = JsonClone(userInfo);
-      cloneUserInfo.avatarUrl = url;
-      const res = await this.$request.user.edit(cloneUserInfo);
-      this.avatarUploading = false;
-      if (!res || res.code !== 0 || !res.data) {
+    async handleAvatarUpload(url: string) {
+      const res = await this.onAvatarUpload(
+        this.$store.state.common.userInfo,
+        url,
+      );
+      if (isUndef(res) || res.code !== 0 || isUndef(res.data)) {
         this.$q.notify({
           type: 'warning',
           message: '上传头像失败',
@@ -151,16 +140,6 @@ export default defineComponent({
           message: '上传头像成功',
         });
       }
-    },
-    onReset() {
-      const userInfo: User = this.$store.state.common.userInfo;
-      const cloneUserInfo = JsonClone(userInfo);
-      Object.keys(this.reactivedUserInfo).forEach((key) => {
-        if (key === 'createdAt' || key === 'updatedAt') return;
-        this.reactivedUserInfo[key] = cloneUserInfo[key];
-      });
-      this.isChange = false;
-      this.isReset = true;
     },
   },
 });

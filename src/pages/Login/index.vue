@@ -9,7 +9,7 @@
       </h5>
     </header>
     <LoginForm
-      :onSubmit="onSubmit"
+      :onSubmit="handleSubmit"
       :onReset="onReset"
       :userAccount.sync="userAccount"
       :password.sync="password"
@@ -23,18 +23,22 @@ import { defineComponent } from '@vue/composition-api';
 import { isDef } from 'src/utils';
 import { PathName } from 'src/router/routes';
 import LoginForm from 'components/LoginForm.vue';
+import useLogin from './useLogin';
 
 export default defineComponent({
   name: 'Login',
   components: {
     LoginForm,
   },
-  data() {
+  setup() {
+    const { userAccount, password, isLoading, onReset, onSubmit } = useLogin();
     return {
-      userAccount: '',
-      password: '',
-      PathName: PathName,
-      isLoading: false,
+      userAccount,
+      password,
+      isLoading,
+      PathName,
+      onReset,
+      onSubmit,
     };
   },
   methods: {
@@ -43,14 +47,8 @@ export default defineComponent({
       setToken: 'common/setToken',
       logIn: 'common/logIn',
     }),
-    onReset() {
-      this.userAccount = this.password = '';
-    },
-    async onSubmit() {
-      const { userAccount, password } = this.$data;
-      this.isLoading = true;
-      const res = await this.$request.user.login({ userAccount, password });
-      this.isLoading = false;
+    async handleSubmit() {
+      const res = await this.onSubmit();
       if (isDef(res) && res.code === 0) {
         const { message, data } = res;
         if (isDef(data)) {

@@ -16,6 +16,7 @@ const mutation: MutationTree<CommonStateInterface> = {
     state.isLogin = true;
   },
   logOut(state: CommonStateInterface) {
+    console.log('logout');
     localStorage.removeItem(USER_INFO_NAME);
     localStorage.removeItem(ACCESS_TOKEN_NAME);
     state.userInfo = JsonClone(DefaultCommonState.userInfo);

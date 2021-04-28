@@ -81,7 +81,7 @@
       :dense="isMobileScreen"
       :rules="[(val) => (val !== '' && val !== null) || '验证码不能为空']"
       :value="captcha"
-      @change="$emit('update:captcha', $event.target.value)"
+      @input="$emit('update:captcha', $event)"
     >
       <template v-slot:after>
         <q-btn
@@ -183,7 +183,6 @@ export default defineComponent({
   methods: {
     async handleSendCaptcha() {
       // 验证表单
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const formItems = (this.$refs['registerForm'] as FormComponent)
         .getValidationComponents()
         .slice(0, -1);
