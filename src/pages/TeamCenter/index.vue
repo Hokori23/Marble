@@ -1,5 +1,10 @@
 <template>
-  <q-page class="team-center column items-center">
+  <q-page
+    :class="[
+      'team-center column items-center',
+      $q.screen.gt.sm ? 'q-mx-lg' : '',
+    ]"
+  >
     <q-card class="team-center-card column">
       <q-card-section class="non-selectable">
         <div class="text-h6 text-center text-weight-bold">
@@ -43,9 +48,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import TeamUserInfo from 'src/components/TeamUserInfo.vue';
-import TeamOverview from 'src/components/TeamOverview.vue';
-import NewTeamDialog from 'src/components/NewTeamDialog.vue';
+import TeamUserInfo from 'src/pages/TeamCenter/TeamUserInfo.vue';
+import TeamOverview from 'src/pages/TeamCenter/TeamOverview.vue';
+import NewTeamDialog from 'src/pages/TeamCenter/NewTeamDialog.vue';
 import { PathName, RouteName } from 'src/router/routes';
 import { mapState } from 'vuex';
 import { StateInterface } from 'src/store';
@@ -54,6 +59,16 @@ import { Team } from 'src/request/team';
 import { isUndef } from 'src/utils';
 import useTeams from './useTeams';
 import useNewTeam from './useNewTeam';
+import Vue from 'vue';
+
+/**
+ * issus: <https://github.com/vuejs/vue-router/issues/2301>
+ * resolution: <https://github.com/vuejs/vue-router/pull/2773/files>
+ */
+// keep original values to restore them later
+const originalSilent = Vue.config.silent;
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const originalWarnHandler = Vue.config.warnHandler;
 
 interface NewTeamDialogProps extends Vue {
   onReset: () => void;
@@ -119,6 +134,17 @@ export default defineComponent({
       // 进入新团队页面
       void this.$router.push(`${PathName.TEAM_CENTER}/${String(res.data.id)}`);
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    Vue.config.silent = false;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    Vue.config.warnHandler = () => {};
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    Vue.config.silent = originalSilent;
+    Vue.config.warnHandler = originalWarnHandler;
+    next();
   },
 });
 </script>

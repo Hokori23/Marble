@@ -9,7 +9,11 @@ export enum PathName {
   HOME = '/home',
   _HOME = 'home',
   TEAM_CENTER = '/team',
-  TEAM_DETAIL = '/team/:id',
+  TEAM = '/team/:id',
+  TEAM_PROJECT = '/team/project',
+  _TEAM_PROJECT = '/team/project/:id',
+  TEAM_DOCUMENT = '/team/document',
+  _TEAM_DOCUMENT = '/team/document/:id',
   USER_CENTER = '/user',
 }
 
@@ -18,7 +22,9 @@ export enum RouteName {
   REGISTER = '注册',
   HOME = '首页',
   TEAM_CENTER = '团队大厅',
-  TEAM_DETAIL = '团队',
+  TEAM = '团队',
+  TEAM_PROJECT = '团队项目',
+  TEAM_DOCUMENT = '团队文档',
   USER_CENTER = '用户中心',
 }
 
@@ -57,14 +63,24 @@ const routes: RouteConfig[] = [
         component: () => import('src/pages/TeamCenter/index.vue'),
       },
       {
-        path: PathName.TEAM_DETAIL,
-        name: RouteName.TEAM_DETAIL,
-        component: () => import('src/pages/TeamDetail/index.vue'),
+        path: PathName.TEAM,
+        name: RouteName.TEAM,
+        component: () => import('src/pages/Team/index.vue'),
+      },
+      {
+        path: PathName._TEAM_PROJECT,
+        name: RouteName.TEAM_PROJECT,
+        component: () => import('src/pages/Team/TeamProject/index.vue'),
       },
       {
         path: PathName.USER_CENTER,
         name: RouteName.USER_CENTER,
         component: () => import('pages/UserCenter/index.vue'),
+      },
+      {
+        path: PathName._TEAM_DOCUMENT,
+        name: RouteName.TEAM_DOCUMENT,
+        component: () => import('pages/Team/TeamDocument/index.vue'),
       },
     ],
   },

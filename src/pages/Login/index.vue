@@ -22,7 +22,7 @@ import { mapMutations } from 'vuex';
 import { defineComponent } from '@vue/composition-api';
 import { isDef } from 'src/utils';
 import { PathName } from 'src/router/routes';
-import LoginForm from 'components/LoginForm.vue';
+import LoginForm from 'src/pages/Login/LoginForm.vue';
 import useLogin from './useLogin';
 
 export default defineComponent({

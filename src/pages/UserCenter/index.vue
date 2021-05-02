@@ -47,8 +47,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import EditForm from 'components/EditForm.vue';
-import UploadAvatar from 'components/UploadAvatar.vue';
+import EditForm from 'src/pages/UserCenter/EditForm.vue';
+import UploadAvatar from 'src/pages/UserCenter/UploadAvatar.vue';
 import { JsonClone, isUndef } from 'src/utils';
 import { mapMutations } from 'vuex';
 import useAvatar from './useAvatar';

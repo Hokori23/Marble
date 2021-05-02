@@ -96,17 +96,29 @@ export const retrieve = async (id: number) => {
 };
 
 /**
- * 遍历某一页用户
- * @param { number } page - 第几页
- * @param { number } capacity - 每页多少行数据
+ * 通过team-id遍历用户
+ * @param { string } id
  */
-export const retrieveAll = async (page: number, capacity: number) => {
+export const retrieveByTeam = async (id: string) => {
   return await request<Restful<User[]>>({
     method: 'GET',
-    url: `${baseUrl}/retrieve`,
+    url: `${baseUrl}/retrieve-team`,
     params: {
-      page,
-      capacity,
+      id,
+    },
+  });
+};
+
+/**
+ * 通过project-id遍历用户
+ * @param { string } id
+ */
+export const retrieveByProject = async (id: string) => {
+  return await request<Restful<User[]>>({
+    method: 'GET',
+    url: `${baseUrl}/retrieve-project`,
+    params: {
+      id,
     },
   });
 };
