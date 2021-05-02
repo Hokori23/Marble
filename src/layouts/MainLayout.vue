@@ -34,7 +34,7 @@
     </q-drawer>
 
     <q-page-container>
-      <keep-alive>
+      <keep-alive :max="10">
         <router-view />
       </keep-alive>
     </q-page-container>

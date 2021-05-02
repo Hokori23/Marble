@@ -38,7 +38,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { PathName } from 'src/router/routes';
-import RegisterForm from 'src/components/RegisterForm.vue';
+import RegisterForm from 'src/pages/Register/RegisterForm.vue';
 import { Notify } from 'quasar';
 import { isUndef } from 'src/utils';
 import useRegister from './useRegister';

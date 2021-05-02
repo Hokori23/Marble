@@ -5,6 +5,8 @@ import { Restful } from './type';
 import * as user from './user';
 import * as upload from './upload';
 import * as team from './team';
+import * as document from './document';
+import * as project from './project';
 import { Store } from 'src/store';
 const isWhiteUrl = (url: string) => {
   return !REQUEST_WHITE_LIST.every((reg) => !reg.test(url));
@@ -58,5 +60,5 @@ export const request = async <T>(config: AxiosRequestConfig) => {
     }
   }
 };
-export { user, upload, team };
-export default { user, upload, team };
+export { user, upload, team, document, project };
+export default { user, upload, team, document, project };
